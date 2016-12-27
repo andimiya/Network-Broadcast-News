@@ -8,14 +8,13 @@ var server = net.createConnection(6969, 'localhost',() => {
 });
 
 server.on('connect', () => {
-
+  console.log('yes');
   process.stdin.pipe(server);
 
   process.stdin.on('data',(clientMessage) => {
 
   console.log(clientMessage);
   server.write(clientMessage);
-  console.log('client Message Console Log');
 
   });
 
