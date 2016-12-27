@@ -11,6 +11,10 @@ server.on('connect', () => {
 
   server.on('data', (serverMessage) => {
     process.stdout.write(serverMessage);
+
+  });
+    server.on('data', (adminMessage) => {
+    process.stdout.write(adminMessage);
+
   });
 });
-
