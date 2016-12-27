@@ -31,8 +31,8 @@ clientsCount++;
     for(var i = 0; i < sockets.length; i++){
 
       sockets[i].write(message);
-      console.log(message, 'message');
     }
+    process.stdout.write(message);
   }
 
   //If there are 3 sockets open, take the socketID from the client sending the message, and pass the message to the other 2 sockets
