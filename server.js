@@ -33,13 +33,9 @@ clientsCount++;
     sockets.forEach(function (client) {
       // Don't want to send it to sender
       if (client === sender) return;
-      client.write(message);
+      client.write(`message from ${socket.id}: ${message}`);
     });
-    // for(var i = 0; i < sockets.length; i++){
-    //   //Need to remove the sending client from this loop
-    //   sockets[i].write(message);
-    // }
-    process.stdout.write(message);
+    process.stdout.write(`message from ${socket.id}: ${message}`);
   }
 });
 
