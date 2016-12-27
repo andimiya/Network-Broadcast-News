@@ -13,9 +13,6 @@ server.on('connect', () => {
 
   process.stdin.on('data',(clientMessage) => {
 
-  console.log(clientMessage);
-  server.write(clientMessage);
-
   });
 
 });

@@ -12,13 +12,11 @@ var server = net.createServer((socket) => {  //THIS SOCKET is different for ever
   socket.on('data', (clientMessage) => {
     messageCount++;
     socket.write(clientMessage);
-    // socket.write(socket.name);
 
     console.log(`the current message count is: ${messageCount}`);
     console.log(`number of clients connected: ${clientsCount}`);
     console.log(`list of client IDs: ${clientIDs}`);
     console.log(`User ${socket.name} said: ${clientMessage}`);
-
   });
 
   process.stdin.on('data', (cmd) => {
