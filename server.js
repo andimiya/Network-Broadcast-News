@@ -2,11 +2,12 @@ const net = require('net');
 
 var clientsCount = 0;
 var messageCount = 0;
-
-
+var clientIDs = [];
 
 var server = net.createServer((socket) => {  //THIS SOCKET is different for every new client connection
   clientsCount++;
+  socket.name = Math.random();
+  clientIDs.push(socket.name);
 
   socket.on('data', (clientMessage) => {
     messageCount++;
@@ -15,9 +16,10 @@ var server = net.createServer((socket) => {  //THIS SOCKET is different for ever
     console.log(`message from client: ${clientMessage}`);
     console.log(`the current message count is: ${messageCount}`);
     console.log(`number of clients connected: ${clientsCount}`);
+    console.log(`list of client IDs: ${clientIDs}`);
+
   });
 
-  process.stdin.pipe(client);
   process.stdin.on('data', (cmd) => {
     socket.write(cmd);
   });

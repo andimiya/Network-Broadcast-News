@@ -5,7 +5,6 @@ const net = require('net');
 
 var server = net.createConnection(6969, 'localhost',() => {
   console.log('connected to server');
-  server.write('world!');
 });
 
 server.on('connect', () => {
@@ -14,8 +13,9 @@ server.on('connect', () => {
 
   process.stdin.on('data',(clientMessage) => {
 
-    console.log(clientMessage);
-    server.write(clientMessage);
+  console.log(clientMessage);
+  server.write(clientMessage);
+  console.log('client Message Console Log');
 
   });
 
