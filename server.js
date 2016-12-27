@@ -20,26 +20,27 @@ clientsCount++;
   //Handle incoming messages from sockets
   socket.on('data', (clientMessage) => {
     messageCount++;  //Running count of all messages
-    broadcast(clientMessage, socket.id);  //Broadcast this to all sockets
+    broadcast(clientMessage, socket);  //Broadcast this to all sockets
 
     // console.log(`the current message count is: ${messageCount}`);
     // console.log(`number of clients connected: ${clientsCount}`);
     // console.log(`User ${socket.id} said: ${clientMessage}`);
   });
 
+  //If there are 3 sockets open, take the socketID from the client sending the message, and pass the message to the other 2 sockets
+  //Loop through all of the sockets and send the message to all of the sockets
   function broadcast(message, sender){
-    for(var i = 0; i < sockets.length; i++){
-
-      sockets[i].write(message);
-    }
+    sockets.forEach(function (client) {
+      // Don't want to send it to sender
+      if (client === sender) return;
+      client.write(message);
+    });
+    // for(var i = 0; i < sockets.length; i++){
+    //   //Need to remove the sending client from this loop
+    //   sockets[i].write(message);
+    // }
     process.stdout.write(message);
   }
-
-  //If there are 3 sockets open, take the socketID from the client sending the message, and pass the message to the other 2 sockets
-
-
-  //Loop through all of the sockets and send the message to all of the sockets
-
 });
 
 server.listen(6969, '0.0.0.0', () => {
