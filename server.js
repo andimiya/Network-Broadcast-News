@@ -2,28 +2,55 @@ const net = require('net');
 
 var clientsCount = 0;
 var messageCount = 0;
-var clientIDs = [];
+var sockets = [];
+//sockets array should hold all of the sockets that are open at the moment
 
+//Start a server
 var server = net.createServer((socket) => {  //THIS SOCKET is different for every new client connection
-  clientsCount++;
-  socket.name = Math.floor(Math.random() * 1000);
-  clientIDs.push(socket.name);
 
+//Might not need this stuff
+clientsCount++;
+
+  //Identify the client that just joined
+  socket.id = Math.floor(Math.random() * 1000);
+
+  //Add the socket to the sockets Array
+  sockets.push(socket);
+
+  //Handle incoming messages from sockets
   socket.on('data', (clientMessage) => {
-    messageCount++;
-    socket.write(clientMessage);
+    messageCount++;  //Running count of all messages
+    broadcast(clientMessage, socket.id);  //Broadcast this to all sockets
 
-    console.log(`the current message count is: ${messageCount}`);
-    console.log(`number of clients connected: ${clientsCount}`);
-    console.log(`list of client IDs: ${clientIDs}`);
-    console.log(`User ${socket.name} said: ${clientMessage}`);
+    // console.log(`the current message count is: ${messageCount}`);
+    // console.log(`number of clients connected: ${clientsCount}`);
+    // console.log(`User ${socket.id} said: ${clientMessage}`);
   });
 
-  process.stdin.on('data', (cmd) => {
-    socket.write(cmd);
-  });
+  function broadcast(message, sender){
+    for(var i = 0; i < sockets.length; i++){
+
+      sockets[i].write(message);
+      console.log(message, 'message');
+    }
+  }
+
+  //If there are 3 sockets open, take the socketID from the client sending the message, and pass the message to the other 2 sockets
+
+
+  //Loop through all of the sockets and send the message to all of the sockets
+
 });
 
 server.listen(6969, '0.0.0.0', () => {
   console.log('opened server on', server.address());
 });
+
+
+
+
+//<----NOTE----->
+//When someone connects, add an event listener named data and send the message from the server to this 1 client
+  // process.stdin.on('data', (cmd) => {
+  //   socket.write(cmd);
+  // });

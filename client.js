@@ -11,9 +11,11 @@ server.on('connect', () => {
   console.log('yes');
   process.stdin.pipe(server);
 
-  process.stdin.on('data',(clientMessage) => {
-
+  server.on('data', (serverMessage) => {
+    process.stdout.write(serverMessage);
   });
+  // process.stdin.on('data',(clientMessage) => {`
+  // });
 
 });
 
