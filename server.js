@@ -3,7 +3,6 @@ const net = require('net');
 var clientsCount = 0;
 var messageCount = 0;
 var sockets = [];
-//sockets array should hold all of the sockets that are open at the moment
 
 //Start a server
 var server = net.createServer((socket) => {  //THIS SOCKET is different for every new client connection
@@ -12,18 +11,24 @@ var server = net.createServer((socket) => {  //THIS SOCKET is different for ever
 clientsCount++;
 
   //Identify the client that just joined
+  var socketAddress = socket.remoteAddress;
   socket.id = Math.floor(Math.random() * 1000);
 
   //Add the socket to the sockets Array
   sockets.push(socket);
 
   //Handle incoming messages from sockets
+  socket.setEncoding('utf8');
+
   socket.on('data', (clientMessage) => {
     messageCount++;  //Running count of all messages
     socket.username = clientMessage;
-    console.log(socket.username);
+    console.log(socketAddress, 'socket username');
     if (socket.username === 'andrea') {
-      console.log('authenticated');
+      process.stdout.write('authenticated');
+    }
+    else {
+      console.log('not authenticated');
     }
 
     broadcast(clientMessage, socket);  //Broadcast this to all sockets
@@ -36,14 +41,22 @@ clientsCount++;
   //If there are 3 sockets open, take the socketID from the client sending the message, and pass the message to the other 2 sockets
   //Loop through all of the sockets and send the message to all of the sockets
   function broadcast(message, sender){
-    sockets.forEach(function (client) {
-      // Don't want to send it to sender
-      if (client === sender) return;
-      client.write(`message from ${socket.id}: ${message}`);
-    });
-    process.stdout.write(`message from ${socket.id}: ${message}`);
+    for (var i = 0; i < sockets.length; i++) {
+      //Try this out:
+      if(sockets[i] !== socket) {
+        sockets[i].write(`${socketAddress}: ${message}`);
+      }
+    }
   }
 });
+
+    // sockets.forEach(function (client) {
+    //   // Don't send it to sender
+    //   if (client === sender) return;
+    //   client.write(`message from ${socket.id}: ${message}`);
+    // });
+    // process.stdout.write(`message from ${socket.id}: ${message}`);
+  // }
 
 server.listen(6969, '0.0.0.0', () => {
   console.log('opened server on', server.address());
