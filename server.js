@@ -7,7 +7,6 @@ var sockets = [];
 
 //Start a server
 var server = net.createServer((socket) => {  //THIS SOCKET is different for every new client connection
-  var firstMessage = null;
 
 //Might not need this stuff
 clientsCount++;
@@ -21,6 +20,12 @@ clientsCount++;
   //Handle incoming messages from sockets
   socket.on('data', (clientMessage) => {
     messageCount++;  //Running count of all messages
+    socket.username = clientMessage;
+    console.log(socket.username);
+    if (socket.username === 'andrea') {
+      console.log('authenticated');
+    }
+
     broadcast(clientMessage, socket);  //Broadcast this to all sockets
 
     // console.log(`the current message count is: ${messageCount}`);
