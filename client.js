@@ -4,6 +4,7 @@ const net = require('net');
 
 var server = net.createConnection(6969, 'localhost',() => {
   console.log('Connected to:');
+  process.stdout.write('Enter your username:');
 });
 
 server.on('connect', () => {

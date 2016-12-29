@@ -7,8 +7,7 @@ var sockets = [];
 
 //Start a server
 var server = net.createServer((socket) => {  //THIS SOCKET is different for every new client connection
-server.name = "admin";
-console.log(server.name, 'admin');
+  var firstMessage = null;
 
 //Might not need this stuff
 clientsCount++;
